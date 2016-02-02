@@ -160,6 +160,8 @@ module mips_core(/*AUTOARG*/
 		       .ctrl_Sys	(ctrl_Sys),
 		       .ctrl_RI		(ctrl_RI),
 		       .alu__sel	(alu__sel[3:0]),
+                       .alu_mux_sel     (alu_mux_sel),  
+                       .reg_sel         (reg_sel),
 		       // Inputs
 		       .dcd_op		(dcd_op[5:0]),
 		       .dcd_funct2	(dcd_funct2[5:0]));
@@ -167,6 +169,19 @@ module mips_core(/*AUTOARG*/
    // Register File
    // Instantiate the register file from regfile.v here.
    // Don't forget to hookup the "halted" signal to trigger the register dump 
+   refile Regfile(
+                    //Outputs
+                    .rs_data            (rs_data[31:0]),
+                    .rt_data            (rt_data[31:0]),
+                    //Inputs
+                    .rs_num             (decode_rs[4:0]),
+                    .rt_num             (decode_rt[4:0]),
+                    .rd_num             (decode_rd[4:0]),
+                    .rd_data            (rd_data[31:0]),
+                    .rd_we              (ctrl_we),
+                    .clk                (clk),
+                    .rst_b              (rst_b),
+                    .halted             (halted));
  
    // synthesis translate_off
    initial begin

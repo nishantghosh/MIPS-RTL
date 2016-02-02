@@ -81,18 +81,18 @@
 `define OP_BNE      6'h05
 `define OP_BLEZ     6'h06
 `define OP_BGTZ     6'h07
-`define OP_ADDI     6'h08
-`define OP_ADDIU    6'h09
-`define OP_SLTI     6'h0a
-`define OP_SLTIU    6'h0b
-`define OP_ANDI     6'h0c
-`define OP_ORI      6'h0d
-`define OP_XORI     6'h0e
+`define OP_ADDI     6'h08//Done
+`define OP_ADDIU    6'h09//Done
+`define OP_SLTI     6'h0a//Done
+`define OP_SLTIU    6'h0b//Done
+`define OP_ANDI     6'h0c//Done
+`define OP_ORI      6'h0d//Done
+`define OP_XORI     6'h0e//Done
 `define OP_LUI      6'h0f
-`define OP_Z0       6'h10
-`define OP_Z1       6'h11
-`define OP_Z2       6'h12
-`define OP_Z3       6'h13
+`define OP_Z0       6'h10/*---------Not Implemented-----------*/
+`define OP_Z1       6'h11/*---------Not Implemented-----------*/
+`define OP_Z2       6'h12/*---------Not Implemented-----------*/
+`define OP_Z3       6'h13/*---------Not Implemented-----------*/
 `define OP_LB       6'h20
 `define OP_LH       6'h21
 `define OP_LWL      6'h22
@@ -141,34 +141,34 @@
 `define OP1_BGEZAL  5'h11
 
 // Secondary opcodes (funct2 field; OP_OTHER0)
-`define OP0_SLL     6'h00
-`define OP0_SRL     6'h02
-`define OP0_SRA     6'h03
-`define OP0_SLLV    6'h04
-`define OP0_SRLV    6'h06
-`define OP0_SRAV    6'h07
+`define OP0_SLL     6'h00//Done
+`define OP0_SRL     6'h02//Done
+`define OP0_SRA     6'h03//Done
+`define OP0_SLLV    6'h04//Done
+`define OP0_SRLV    6'h06//Done
+`define OP0_SRAV    6'h07//Done
 `define OP0_JR      6'h08
 `define OP0_JALR    6'h09
-`define OP0_SYSCALL 6'h0c
+`define OP0_SYSCALL 6'h0c//Done
 `define OP0_BREAK   6'h0d
 `define OP0_MFHI    6'h10
 `define OP0_MTHI    6'h11
 `define OP0_MFLO    6'h12
 `define OP0_MTLO    6'h13
-`define OP0_MULT    6'h18
-`define OP0_MULTU   6'h19
-`define OP0_DIV     6'h1a
-`define OP0_DIVU    6'h1b
-`define OP0_ADD     6'h20
-`define OP0_ADDU    6'h21
-`define OP0_SUB     6'h22
-`define OP0_SUBU    6'h23
-`define OP0_AND     6'h24
-`define OP0_OR      6'h25
-`define OP0_XOR     6'h26
-`define OP0_NOR     6'h27
-`define OP0_SLT     6'h2a
-`define OP0_SLTU    6'h2b
+`define OP0_MULT    6'h18/*---------Not Implemented-----------*/
+`define OP0_MULTU   6'h19/*---------Not Implemented-----------*/
+`define OP0_DIV     6'h1a/*---------Not Implemented-----------*/
+`define OP0_DIVU    6'h1b/*---------Not Implemented-----------*/
+`define OP0_ADD     6'h20//Done
+`define OP0_ADDU    6'h21//Done 
+`define OP0_SUB     6'h22//Done
+`define OP0_SUBU    6'h23//Done
+`define OP0_AND     6'h24//Done
+`define OP0_OR      6'h25//Done
+`define OP0_XOR     6'h26//Done
+`define OP0_NOR     6'h27//Done
+`define OP0_SLT     6'h2a//Done
+`define OP0_SLTU    6'h2b//Done
 
 // Tertiary opcodes (funct2 field; OP_Z1 && (OPZ_COPZS || OPZ_COPZD))
 `define OPF_ADDF    6'h00
@@ -320,3 +320,4 @@
 `define MUL_MULTU   3'h5
 `define MUL_DIV     3'h6
 `define MUL_DIVU    3'h7
+
