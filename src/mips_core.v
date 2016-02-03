@@ -366,9 +366,9 @@ module mips_core(/*AUTOARG*/
                     .rs_data            (rs_data[31:0]),
                     .rt_data            (rt_data[31:0]),
                     //Inputs
-                    .rs_num             (decode_rs[4:0]),
-                    .rt_num             (decode_rt[4:0]),
-                    .rd_num             (decode_rd[4:0]),
+                    .rs_num             (dcd_rs[4:0]),
+                    .rt_num             (dcd_rt[4:0]),
+                    .rd_num             (dcd_rd[4:0]),
                     .rd_data            (rd_data[31:0]),
                     .rd_we              (ctrl_we),
                     .clk                (clk),
