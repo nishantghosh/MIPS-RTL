@@ -64,145 +64,236 @@ module mips_decode(/*AUTOARG*/
    output reg        alu_mux_sel;  
    output reg        reg_sel;
 
-   always @(*) begin
-     alu__sel = 4'hx;
-     ctrl_we = 1'b0;
-     ctrl_Sys = 1'b0;
-     ctrl_RI = 1'b0;
-     alu_mux_sel = 1'b0;
-     reg_sel = 1'b0;// GPR[rd] by default
-     case(dcd_op)
-       `OP_OTHER0:
-         case(dcd_funct2)
-           `OP0_SYSCALL:
-                ctrl_Sys = 1'b1;
-	   `OP0_ADD:
-                alu__sel = `ALU_ADD;
-                alu_mux_sel = 1'b1;
-                ctrl_we = 1'b1;
-	   `OP0_ADDU:
-		alu__sel = `ALU_ADD;
-		alu_mux_sel = 1'b1;
-		ctrl_we = 1'b1;
-	   `OP0_SUB:
-		alu__sel = `ALU_SUB;
-		alu_mux_sel = 1'b1;
-		ctrl_we = 1'b1;
-	   `OP0_SUBU:
-		alu__sel = `ALU_SUB;
-		alu_mux_sel = 1'b1;
-		ctrl_we = 1'b1;
-	   `OP0_AND:
-		alu__sel = `ALU_AND;
-		alu_mux_sel = 1'b1;
-		ctrl_we = 1'b1;
-	   `OP0_OR:
-		alu__sel = `ALU_OR;
-		alu_mux_sel = 1'b1;
-		ctrl_we = 1'b1;
-	   `OP0_XOR:
-		alu__sel = `ALU_XOR;
-		alu_mux_sel = 1'b1;
-		ctrl_we = 1'b1;
-	   `OP0_NOR:
-		alu__sel = `ALU_NOR;
-		alu_mux_sel = 1'b1;
-		ctrl_we = 1'b1;
-	   `OP0_SLT:
-		alu__sel = `ALU_SLT;
-		alu_mux_sel = 1'b1;
-		ctrl_we = 1'b1;
-	   `OP0_SLTU:
-		alu__sel = `ALU_SLTU;
-		alu_mux_sel = 1'b1;
-		ctrl_we = 1'b1;
-	   `OP0_SLL:
-		alu__sel  = `ALU_SLL;
-		alu_mux_sel = 1'b1;
-		ctrl_we = 1'b1;
-	   `OP0_SLLV:
-		alu__sel = `ALU_SLLV;
-		alu_mux_sel = 1'b1;
-		ctrl_we = 1'b1;
-	   `OP0_SRL:
-		alu__sel = `ALU_SRL;
-		alu_mux_sel = 1'b1;
-		ctrl_we = 1'b1;
-	   `OP0_SRA:
-		alu__sel = `ALU_SRA;
-		alu_mux_sel = 1'b1;
-		ctrl_we = 1'b1;
-	   `OP0_SRAV:
-		alu__sel = `ALU_SRAV;
-		alu_mux_sel = 1'b1;
-		ctrl_we = 1'b1;
-	   `OP0_JR:
-		ctrl_we = 1'b0;
-	   `OP0_JALR:
-		ctrl_we = 1'b0;
-	   `OP0_MFHI:
-		ctrl_we = 1'b1
-	   `OP0_MTHI:
-	   `OP0_MFLO:
-	   `OP0_MTLO:
-           default:
-                ctrl_RI = 1'b1;
-         endcase
-       `OP_ADDIU:
-         begin
-            alu__sel = `ALU_ADD;
-            ctrl_we = 1'b1;
-	    alu_mux_sel = 1'b0;
-	    reg_sel = 1'b1; //GPR[rt] selected as dest. register
-         end
-       `OP_ADDI:
-         begin
-	    alu__sel = `ALU_ADD;
-	    ctrl_we = 1'b1;
- 	    alu_mux_sel = 1'b0;
-	    reg_sel = 1'b1; //GPR[rt] selected as dest. register
-	 end
-       `OP_ANDI:
-	 begin
-	    alu__sel = `ALU_AND;
-	    ctrl_we = 1'b1;
-	    alu_mux_sel = 1'b0;
-	    reg_sel = 1'b1;
-	 end
-	`OP_ORI:
-	  begin
- 	    alu__sel = `ALU_OR;
-            ctrl_we = 1'b1;
-	    alu_mux_sel = 1'b0;
-	    reg_sel = 1'b1;
-	  end
-	`OP_XORI:
-	  begin
-	    alu__sel = `ALU_XOR;
-	    ctrl_we = 1'b1;
-	    alu_mux_sel = 1'b0;
-	    reg_sel = 1'b1;
-	  end
-	`OP_SLTI:
-	  begin
-	    alu__sel = `ALU_SLT;
-	    ctrl_we = 1'b1;
-	    alu_mux_sel = 1'b0;
-	    reg_sel = 1'b1;
-	  end
-	`OP_SLTIU:
-	  begin
-	    alu__sel = `ALU_SLTU;
-	    ctrl_we = 1'b1;
-	    alu_mux_sel = 1'b0;
-	    reg_sel = 1'b1;
-	  end
-	`OP_
-       default:
-         begin
-            ctrl_RI = 1'b1;
-         end
-     endcase // case(op)
+
+
+
+   always @(posedge clk or negedge reset) begin
+        //ALU   
+        alu__sel = 4'hx;
+        ctrl_we = 1'b0;
+        ctrl_Sys = 1'b0;
+        ctrl_RI = 1'b0;
+        alu_mux_sel = 1'b0;
+        reg_sel = 1'b0;// GPR[rd] by default
+        case(dcd_op)
+	    `OP_OTHER0:
+	        begin
+                    case(dcd_funct2)
+                        `OP0_SYSCALL:
+                            ctrl_Sys = 1'b1;
+                        `OP0_BREAK:
+                            begin
+                            end
+                        `OP0_ADD:
+                            begin
+                                alu__sel = `ALU_ADD;
+                                alu_mux_sel = 1'b1;
+                                ctrl_we = 1'b1;
+                            end
+                        `OP0_SLL:
+                            begin
+		                alu__sel  = `ALU_SLL;
+		                alu_mux_sel = 1'b1;
+		                ctrl_we = 1'b1;
+                            end
+                        `OP0_SRL:
+                            begin
+		                alu__sel = `ALU_SRL;
+		                alu_mux_sel = 1'b1;
+		                ctrl_we = 1'b1;
+                            end
+                        `OP0_SRA:
+                            begin
+		                alu__sel = `ALU_SRA;
+		                alu_mux_sel = 1'b1;
+		                ctrl_we = 1'b1;
+                            end
+                        `OP0_SLLV:
+                            begin
+		                alu__sel = `ALU_SLLV;
+		                alu_mux_sel = 1'b1;
+		                ctrl_we = 1'b1;
+                            end
+                        `OP0_SRLV:
+                            begin
+                            end
+                        `OP0_SRAV:
+                            begin
+		                alu__sel = `ALU_SRAV;
+		                alu_mux_sel = 1'b1;
+		                ctrl_we = 1'b1;
+                            end
+                        `OP0_ADDU:
+                            begin
+		                alu__sel = `ALU_ADD;
+		                alu_mux_sel = 1'b1;
+		                ctrl_we = 1'b1;
+                            end
+                        `OP0_SUB:
+                            begin
+		                alu__sel = `ALU_SUB;
+		                alu_mux_sel = 1'b1;
+		                ctrl_we = 1'b1;
+                            end
+                        `OP0_SUBU:
+                            begin
+		                alu__sel = `ALU_SUB;
+		                alu_mux_sel = 1'b1;
+		                ctrl_we = 1'b1;
+                            end
+                        `OP0_AND:
+                            begin
+		                alu__sel = `ALU_AND;
+		                alu_mux_sel = 1'b1;
+		                ctrl_we = 1'b1;
+                            end
+                        `OP0_OR:
+                            begin
+		                alu__sel = `ALU_OR;
+		                alu_mux_sel = 1'b1;
+		                ctrl_we = 1'b1;
+                            end
+                        `OP0_NOR:
+                            begin
+		                alu__sel = `ALU_NOR;
+		                alu_mux_sel = 1'b1;
+		                ctrl_we = 1'b1;
+                            end
+                        `OP0_SLT:
+                            begin
+		                alu__sel = `ALU_SLT;
+		                alu_mux_sel = 1'b1;
+		                ctrl_we = 1'b1;
+                            end
+                        `OP0_MFHI:
+		            ctrl_we = 1'b1
+                        `OP0_MFLO:
+                            begin
+                            end
+                        `OP0_MTLO:
+                            begin
+                            end
+                        `OP0_MTHI:
+                            begin
+                            end
+                        `OP0_SLTU:
+                            begin
+		                alu__sel = `ALU_SLTU;
+		                alu_mux_sel = 1'b1;
+		                ctrl_we = 1'b1;
+                            end
+                        `OP0_XOR:
+                            begin
+		                alu__sel = `ALU_XOR;
+		                alu_mux_sel = 1'b1;
+		                ctrl_we = 1'b1;
+                            end
+                        `OP0_JR:
+		            ctrl_we = 1'b0;
+                        `OP0_JALR:
+		            ctrl_we = 1'b0;
+                    default:
+                        ctrl_RI = 1'b1;
+                    endcase
+	        end
+	    `OP_OTHER1:
+	        begin
+                    case(dcd_rt)
+                        `OP0_BLTZ:
+                            begin
+                            end
+                        `OP0_BGEZ:
+                            begin
+                            end
+                        `OP0_BLTZAL:
+                            begin
+                            end
+                        `OP0_BGEZAL:
+                            begin
+                            end
+                    default:
+                        begin
+                        end
+                    endcase
+            `OP_ADDIU:
+                begin
+                    alu__sel = `ALU_ADD;
+                    ctrl_we = 1'b1;
+	            alu_mux_sel = 1'b0;
+	            reg_sel = 1'b1; //GPR[rt] selected as dest. register
+                end
+            `OP_ADDI:
+                begin
+	            alu__sel = `ALU_ADD;
+	            ctrl_we = 1'b1;
+ 	            alu_mux_sel = 1'b0;
+	            reg_sel = 1'b1; //GPR[rt] selected as dest. register
+    	        end
+            `OP_ANDI:
+    	        begin
+	            alu__sel = `ALU_AND;
+	            ctrl_we = 1'b1;
+	            alu_mux_sel = 1'b0;
+	            reg_sel = 1'b1;
+    	        end
+	    `OP_ORI:
+	        begin
+ 	            alu__sel = `ALU_OR;
+                    ctrl_we = 1'b1;
+	            alu_mux_sel = 1'b0;
+	            reg_sel = 1'b1;
+	        end
+	    `OP_XORI:
+	        begin
+	            alu__sel = `ALU_XOR;
+	            ctrl_we = 1'b1;
+	            alu_mux_sel = 1'b0;
+	            reg_sel = 1'b1;
+	        end
+	    `OP_SLTI:
+	        begin
+	            alu__sel = `ALU_SLT;
+	            ctrl_we = 1'b1;
+	            alu_mux_sel = 1'b0;
+	            reg_sel = 1'b1;
+	        end
+	    `OP_SLTIU:
+	        begin
+	            alu__sel = `ALU_SLTU;
+	            ctrl_we = 1'b1;
+	            alu_mux_sel = 1'b0;
+	            reg_sel = 1'b1;
+	        end
+	    `OP_LB:
+	        begin
+	        end
+	    `OP_LH:
+	        begin
+	        end
+	    `OP_LW:
+	        begin
+	        end
+	    `OP_LBU:
+	        begin
+	        end
+	    `OP_LHU:
+	        begin
+	        end
+	    `OP_SB:
+	        begin
+	        end
+	    `OP_SH:
+	        begin
+	        end
+	    `OP_SW:
+	        begin
+	        end
+	    default:
+	    default:
+	        begin
+                    ctrl_RI = 1'b1;
+	        end
+        endcase
    end
 
 endmodule

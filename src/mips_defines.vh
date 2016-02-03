@@ -105,34 +105,34 @@
 `define OP_SWL      6'h2a
 `define OP_SW       6'h2b
 `define OP_SWR      6'h2e
-`define OP_LWC0     6'h30
-`define OP_LWC1     6'h31
-`define OP_LWC2     6'h32
-`define OP_LWC3     6'h33
-`define OP_SWC0     6'h38
-`define OP_SWC1     6'h39
-`define OP_SWC2     6'h3a
-`define OP_SWC3     6'h3b
+`define OP_LWC0     6'h30/*---------Not Implemented-----------*/
+`define OP_LWC1     6'h31/*---------Not Implemented-----------*/
+`define OP_LWC2     6'h32/*---------Not Implemented-----------*/
+`define OP_LWC3     6'h33/*---------Not Implemented-----------*/
+`define OP_SWC0     6'h38/*---------Not Implemented-----------*/
+`define OP_SWC1     6'h39/*---------Not Implemented-----------*/
+`define OP_SWC2     6'h3a/*---------Not Implemented-----------*/
+`define OP_SWC3     6'h3b/*---------Not Implemented-----------*/
 
 // Secondary opcodes (rs field; OP_Z[0-3])
-`define OPZ_MFCZ    5'h00
-`define OPZ_CFCZ    5'h02
-`define OPZ_MTCZ    5'h04
-`define OPZ_CTCZ    5'h06
-`define OPZ_BCZ     5'h08
-`define OPZ_COPZS   5'h10
-`define OPZ_COPZD   5'h11
+`define OPZ_MFCZ    5'h00/*---------Not Implemented-----------*/
+`define OPZ_CFCZ    5'h02/*---------Not Implemented-----------*/
+`define OPZ_MTCZ    5'h04/*---------Not Implemented-----------*/
+`define OPZ_CTCZ    5'h06/*---------Not Implemented-----------*/
+`define OPZ_BCZ     5'h08/*---------Not Implemented-----------*/
+`define OPZ_COPZS   5'h10/*---------Not Implemented-----------*/
+`define OPZ_COPZD   5'h11/*---------Not Implemented-----------*/
 
 // Tertiary opcodes (bczft field; OP_Z[0-3] && OPZ_BCZ)
-`define OPB_BCZF    1'h0
-`define OPB_BCZT    1'h1
+`define OPB_BCZF    1'h0/*---------Not Implemented-----------*/
+`define OPB_BCZT    1'h1/*---------Not Implemented-----------*/
 
 // Tertiary opcodes (funct1 field; OP_Z0 && OPZ_COPZS)
-`define OPC_TLBR    5'h01
-`define OPC_TLBWI   5'h02
-`define OPC_TLBWR   5'h06
-`define OPC_TLBP    5'h08
-`define OPC_RFE     5'h10
+`define OPC_TLBR    5'h01/*---------Not Implemented-----------*/
+`define OPC_TLBWI   5'h02/*---------Not Implemented-----------*/
+`define OPC_TLBWR   5'h06/*---------Not Implemented-----------*/
+`define OPC_TLBP    5'h08/*---------Not Implemented-----------*/
+`define OPC_RFE     5'h10/*---------Not Implemented-----------*/
 
 // Secondary opcodes (rt field; OP_OTHER1)
 `define OP1_BLTZ    5'h00
@@ -171,32 +171,32 @@
 `define OP0_SLTU    6'h2b//Done
 
 // Tertiary opcodes (funct2 field; OP_Z1 && (OPZ_COPZS || OPZ_COPZD))
-`define OPF_ADDF    6'h00
-`define OPF_SUBF    6'h01
-`define OPF_MULF    6'h02
-`define OPF_DIVF    6'h03
-`define OPF_ABSF    6'h05
-`define OPF_MOVF    6'h06
-`define OPF_NEGF    6'h07
-`define OPF_CVTSF   6'h20
-`define OPF_CVTDF   6'h21
-`define OPF_CVTWF   6'h24
-`define OPF_CFF     6'h30
-`define OPF_CUNF    6'h31
-`define OPF_CEQF    6'h32
-`define OPF_CUEQF   6'h33
-`define OPF_COLTF   6'h34
-`define OPF_CULTF   6'h35
-`define OPF_COLEF   6'h36
-`define OPF_CULEF   6'h37
-`define OPF_CSFF    6'h38
-`define OPF_CNGLEF  6'h39
-`define OPF_CSEQF   6'h3a
-`define OPF_CNGLF   6'h3b
-`define OPF_CLTF    6'h3c
-`define OPF_CNGEF   6'h3d
-`define OPF_CLEF    6'h3e
-`define OPF_CNGTF   6'h3f
+`define OPF_ADDF    6'h00/*---------Not Implemented-----------*/
+`define OPF_SUBF    6'h01/*---------Not Implemented-----------*/
+`define OPF_MULF    6'h02/*---------Not Implemented-----------*/
+`define OPF_DIVF    6'h03/*---------Not Implemented-----------*/
+`define OPF_ABSF    6'h05/*---------Not Implemented-----------*/
+`define OPF_MOVF    6'h06/*---------Not Implemented-----------*/
+`define OPF_NEGF    6'h07/*---------Not Implemented-----------*/
+`define OPF_CVTSF   6'h20/*---------Not Implemented-----------*/
+`define OPF_CVTDF   6'h21/*---------Not Implemented-----------*/
+`define OPF_CVTWF   6'h24/*---------Not Implemented-----------*/
+`define OPF_CFF     6'h30/*---------Not Implemented-----------*/
+`define OPF_CUNF    6'h31/*---------Not Implemented-----------*/
+`define OPF_CEQF    6'h32/*---------Not Implemented-----------*/
+`define OPF_CUEQF   6'h33/*---------Not Implemented-----------*/
+`define OPF_COLTF   6'h34/*---------Not Implemented-----------*/
+`define OPF_CULTF   6'h35/*---------Not Implemented-----------*/
+`define OPF_COLEF   6'h36/*---------Not Implemented-----------*/
+`define OPF_CULEF   6'h37/*---------Not Implemented-----------*/
+`define OPF_CSFF    6'h38/*---------Not Implemented-----------*/
+`define OPF_CNGLEF  6'h39/*---------Not Implemented-----------*/
+`define OPF_CSEQF   6'h3a/*---------Not Implemented-----------*/
+`define OPF_CNGLF   6'h3b/*---------Not Implemented-----------*/
+`define OPF_CLTF    6'h3c/*---------Not Implemented-----------*/
+`define OPF_CNGEF   6'h3d/*---------Not Implemented-----------*/
+`define OPF_CLEF    6'h3e/*---------Not Implemented-----------*/
+`define OPF_CNGTF   6'h3f/*---------Not Implemented-----------*/
 
 
 ////
