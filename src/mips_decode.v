@@ -62,7 +62,7 @@ module mips_decode(/*AUTOARG*/
    output reg        ctrl_we, ctrl_Sys, ctrl_RI;
    output reg  [3:0] alu__sel;
    output reg 	     alu_mux_sel;
-   output reg  [7:0] regsrc;
+   output reg  [3:0] regsrc;
    output reg        regdst;
    output reg        sign_ext;
    output reg        shamt;
@@ -76,7 +76,7 @@ module mips_decode(/*AUTOARG*/
         ctrl_Sys = 1'b0;
         ctrl_RI = 1'b0;
         alu_mux_sel = 1'b0;
-        regsrc = 8'b0;
+        regsrc = 4'b0;
         sign_ext = 1'b0;
         shamt = 1'b0;
         regdst = 1'b0;
@@ -100,40 +100,42 @@ module mips_decode(/*AUTOARG*/
                             begin
 		                alu__sel  = `ALU_SL;
 		                ctrl_we = 1'b1;
-			        regsrc = 8'b00100000;
+			        regsrc = 4'b1000;
                                 op_sel = 1'b0;
                             end
                         `OP0_SRL:
                             begin
 		                alu__sel = `ALU_SR;
 		                ctrl_we = 1'b1;
-			        regsrc = 8'b00100000;
+			        regsrc = 4'b1000;
 			        op_sel = 1'b0;
                             end
                         `OP0_SRA:
                             begin
 		                alu__sel = `ALU_SRA;
 		                ctrl_we = 1'b1;
-			        regsrc = 8'b00100000;
+			        regsrc = 4'b1000;
                                 op_sel = 1'b0;
                             end
                         `OP0_SLLV:
                             begin
 		                alu__sel = `ALU_SL;
 		                ctrl_we = 1'b1;
-                                regsrc = 8'b10000000;
+			        regsrc = 4'b0001;
                                 op_sel = 1'b0;
                             end
                         `OP0_SRLV:
                             begin
                                 alu__sel = `ALU_SR;
                                 ctrl_we = 1'b1;
+			        regsrc = 4'b0001;
                                 op_sel = 1'b0;
                             end
                         `OP0_SRAV:
                             begin
 		                alu__sel = `ALU_SRA;
 		                ctrl_we = 1'b1;
+                                ctrl_we = 1'b1;
                                 op_sel = 1'b0;
                             end
                         `OP0_ADDU:
@@ -171,8 +173,8 @@ module mips_decode(/*AUTOARG*/
 		                alu__sel = `ALU_SL;
 		                ctrl_we = 1'b1;
                             end
-                        `OP0_MFHI:
-		            ctrl_we = 1'b1;
+                        //`OP0_MFHI:
+		        //    ctrl_we = 1'b1;
                         //`OP0_MFLO:
                         //    begin
                         //    end
@@ -223,45 +225,48 @@ module mips_decode(/*AUTOARG*/
                 begin
                     alu__sel = `ALU_ADD;
                     ctrl_we = 1'b1;
-                    regsrc = 8'b00000001;
+                    regsrc = 4'b0010;
+                    regdst = 1'b1;
                 end
             `OP_ADDI:
                 begin
 	            alu__sel = `ALU_ADD;
 	            ctrl_we = 1'b1;
-                    regsrc = 8'b00000001;
+                    regsrc = 4'b0010;
+                    regdst = 1'b1;
     	        end
             `OP_ANDI:
     	        begin
 	            alu__sel = `ALU_AND;
 	            ctrl_we = 1'b1;
-                    regsrc = 8'b00000010;
+                    regsrc = 4'b0100;
                     regdst = 1'b1;
     	        end
 	    `OP_ORI:
 	        begin
  	            alu__sel = `ALU_OR;
                     ctrl_we = 1'b1;
-                    regsrc = 8'b00000010;
+                    regsrc = 4'b0100;
                     regdst = 1'b1;
 	        end
 	    `OP_XORI:
 	        begin
 	            alu__sel = `ALU_XOR;
 	            ctrl_we = 1'b1;
-                    regsrc = 8'b00000010;
+                    regsrc = 4'b0100;
                     regdst = 1'b1;
 	        end
 	    `OP_SLTI:
 	        begin
 	            alu__sel = `ALU_SL;
+                    regsrc = 4'b0010;
 	            ctrl_we = 1'b1;
 	        end
 	    `OP_SLTIU:
 	        begin
 	            alu__sel = `ALU_SL;
 	            ctrl_we = 1'b1;
-                    regsrc = 8'b00000001;
+                    regsrc = 4'b0010;
                     regdst = 1'b1;
 	        end
 	    //`OP_LB:

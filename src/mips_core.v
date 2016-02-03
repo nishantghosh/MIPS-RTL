@@ -108,8 +108,8 @@ module mips_core(/*AUTOARG*/
    wire [31:0]    op1;
    wire [31:0]    op2; 
    wire [31:0]    op_dst;
-   wire 	         alu_mux_sel;
-   wire [7:0]     regsrc;
+   wire 	  alu_mux_sel;
+   wire [3:0]     regsrc;
    wire           regdst;
    wire           sign_ext;
    wire           shamt;
@@ -150,6 +150,8 @@ module mips_core(/*AUTOARG*/
        $display ( "[pc=%x, inst=%x] [op=%x, rs=%d, rt=%d, rd=%d, imm=%x, f2=%x] [reset=%d, halted=%d]",
                    pc, inst, dcd_op, dcd_rs, dcd_rt, dcd_rd, dcd_imm, dcd_funct2, ~rst_b, halted);
        $display( "rs_data=%x, rt_data=%x, rd_data=%x",rs_data,rt_data,rd_data);
+       $display("regsrc=%x, regdst=%x",regsrc,regdst);
+       $display("op1=%x  op2=%x  op_dst=%x",op1,op2,op_dst);
      end
    end
    // synthesis translate_on
@@ -158,15 +160,19 @@ module mips_core(/*AUTOARG*/
 
    //always @(*) begin
        assign op1 = op_sel ? rs_data : rt_data; //TODO - reg[dcd_rs]
-       assign op_dst = regdst ? rt_data : rs_data;
-       assign op2 = regsrc[7] ? dcd_rs :
-             regsrc[6] ? {2'h0, dcd_imm} : //18_u
-             regsrc[5] ? dcd_shamt : //SLL
-             regsrc[4] ? { {2{dcd_imm[15]}}, dcd_imm } : //18_s
-             regsrc[3] ? dcd_imm : //16_u
-             regsrc[2] ? $signed(dcd_offset) :
-             regsrc[1] ? dcd_e_imm : //32_u
-             regsrc[0] ? dcd_se_imm : rt_data;
+       assign op_dst = regdst ? rt_data : rd_data;
+       //assign op2 = 0 ? dcd_rs :
+       //      0 ? {2'h0, dcd_imm} : //18_u
+       //      0 ? dcd_shamt : //SLL
+       //      0 ? { {2{dcd_imm[15]}}, dcd_imm } : //18_s
+       //      0 ? dcd_imm : //16_u
+       //      0 ? $signed(dcd_offset) :
+       //      0 ? dcd_e_imm : //32_u
+       //      1 ? dcd_se_imm : rt_data;
+       assign op2 = regsrc[3] ? dcd_shamt :
+             regsrc[2] ? dcd_e_imm : //32_u
+             regsrc[1] ? dcd_se_imm : 
+             regsrc[0] ? rs_data:rt_data; 
 
    // Let Verilog-Mode pipe wires through for us.  This is another example
    // of Verilog-Mode's power -- undeclared nets get AUTOWIREd up when we
@@ -202,13 +208,13 @@ module mips_core(/*AUTOARG*/
    // Don't forget to hookup the "halted" signal to trigger the register dump 
    regfile Regfile(
                     //Outputs
-                    .rs_data            (rs_data),
-                    .rt_data            (rt_data),
+                    .rs_data            (rs_data[31:0]),
+                    .rt_data            (rt_data[31:0]),
                     //Inputs
-                    .rs_num             (dcd_rs),
-                    .rt_num             (dcd_rt),
-                    .rd_num             (dcd_rd),
-                    .rd_data            (rd_data),
+                    .rs_num             (dcd_rs[4:0]),
+                    .rt_num             (dcd_rt[4:0]),
+                    .rd_num             (dcd_rd[4:0]),
+                    .rd_data            (rd_data[31:0]),
                     .rd_we              (ctrl_we),
                     .clk                (clk),
                     .rst_b              (rst_b),
@@ -231,14 +237,14 @@ module mips_core(/*AUTOARG*/
    // synthesis translate_on
 
    // Execute
-   mips_ALU ALU(.alu__out(rd_data), 
-                .alu__op1(rs_data),
-                .alu__op2(rt_data),
-                .alu__sel(alu__sel));
-   //mips_ALU ALU(.alu__out(op_dst), 
-   //             .alu__op1(op1),
-   //             .alu__op2(op2),
+   //mips_ALU ALU(.alu__out(rd_data), 
+   //             .alu__op1(rs_data),
+   //             .alu__op2(dcd_se_imm),
    //             .alu__sel(alu__sel));
+   mips_ALU ALU(.alu__out(op_dst), 
+                .alu__op1(op1),
+                .alu__op2(op2),
+                .alu__sel(alu__sel));
  
    // Miscellaneous stuff (Exceptions, syscalls, and halt)
    exception_unit EU(.exception_halt(exception_halt), .pc(pc), .rst_b(rst_b),
