@@ -101,6 +101,9 @@ module mips_core(/*AUTOARG*/
    wire [25:0]   dcd_target;
    wire [19:0]   dcd_code;
    wire          dcd_bczft;
+   reg           op1[31:0];
+   reg           op2[31:0]; 
+   reg           op_dst[31:0];
    
    // PC Management
    register #(32, text_start) PCReg(pc, nextpc, clk, ~internal_halt, rst_b);
@@ -143,9 +146,14 @@ module mips_core(/*AUTOARG*/
 
 
 
-
    always @(posedge clk or negedge reset) begin
         //ALU   
+        op1 = rs;
+        op2 = rt;
+        op_dst = rd;
+        op_OR = op1|op2;
+        op_AND = op1 . op2;
+        op_
         case(dcd_op)
 	    `OP_OTHER0:
 	        begin
@@ -367,8 +375,6 @@ module mips_core(/*AUTOARG*/
 		       .ctrl_Sys	(ctrl_Sys),
 		       .ctrl_RI		(ctrl_RI),
 		       .alu__sel	(alu__sel[3:0]),
-                       .alu_mux_sel     (alu_mux_sel),  
-                       .reg_sel         (reg_sel),
 		       // Inputs
 		       .dcd_op		(dcd_op[5:0]),
 		       .dcd_funct2	(dcd_funct2[5:0]));
@@ -407,9 +413,9 @@ module mips_core(/*AUTOARG*/
    // synthesis translate_on
 
    // Execute
-   mips_ALU ALU(.alu__out(alu__out), 
-                .alu__op1(rs_data),
-                .alu__op2(dcd_se_imm),
+   mips_ALU ALU(.alu__out(op_dst), 
+                .alu__op1(op1),
+                .alu__op2(op2),
                 .alu__sel(alu__sel));
  
    // Miscellaneous stuff (Exceptions, syscalls, and halt)
