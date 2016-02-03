@@ -341,6 +341,13 @@ module mips_core(/*AUTOARG*/
         endcase
    end
 
+
+
+
+
+
+
+
    // Let Verilog-Mode pipe wires through for us.  This is another example
    // of Verilog-Mode's power -- undeclared nets get AUTOWIREd up when we
    // run 'make auto'.
