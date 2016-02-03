@@ -47,6 +47,8 @@ module regfile (/*AUTOARG*/
 			`include "regfile_init.vh"
 		end else if (rd_we && (rd_num != 0)) begin 
 			mem[rd_num] <= rd_data; 
+                        $display( "reg: rs_num=%x, rt_num=%x, rd_num=%x",dcd_rs,dcd_rt,dcd_rd);
+                        $display( "reg: rs_data=%x, rt_data=%x, rd_data=%x",rs_data,rt_data,rd_data);
 		end 
 	end 
 

@@ -103,15 +103,16 @@ module mips_core(/*AUTOARG*/
    wire [25:0]   dcd_target;
    wire [19:0]   dcd_code;
    wire          dcd_bczft;
-   reg           op_sel;
-   reg [31:0]    op1;
-   reg [31:0]    op2; 
-   reg [31:0]    op_dst;
-   reg 	         alu_mux_sel;
-   reg [7:0]     regsrc;
-   reg           regdst;
-   reg           sign_ext;
-   reg           shamt;
+
+   wire           op_sel;
+   wire [31:0]    op1;
+   wire [31:0]    op2; 
+   wire [31:0]    op_dst;
+   wire 	         alu_mux_sel;
+   wire [7:0]     regsrc;
+   wire           regdst;
+   wire           sign_ext;
+   wire           shamt;
    
    // PC Management
    register #(32, text_start) PCReg(pc, nextpc, clk, ~internal_halt, rst_b);
@@ -148,16 +149,17 @@ module mips_core(/*AUTOARG*/
        $display ( "=== Simulation Cycle %d ===", $time );
        $display ( "[pc=%x, inst=%x] [op=%x, rs=%d, rt=%d, rd=%d, imm=%x, f2=%x] [reset=%d, halted=%d]",
                    pc, inst, dcd_op, dcd_rs, dcd_rt, dcd_rd, dcd_imm, dcd_funct2, ~rst_b, halted);
+       $display( "rs_data=%x, rt_data=%x, rd_data=%x",rs_data,rt_data,rd_data);
      end
    end
    // synthesis translate_on
 
 
 
-   always @(*) begin
-       op1 = op_sel ? rs_data : rt_data; //TODO - reg[dcd_rs]
-       op_dst = regdst ? rt_data : rs_data;
-       op2 = regsrc[7] ? dcd_rs :
+   //always @(*) begin
+       assign op1 = op_sel ? rs_data : rt_data; //TODO - reg[dcd_rs]
+       assign op_dst = regdst ? rt_data : rs_data;
+       assign op2 = regsrc[7] ? dcd_rs :
              regsrc[6] ? {2'h0, dcd_imm} : //18_u
              regsrc[5] ? dcd_shamt : //SLL
              regsrc[4] ? { {2{dcd_imm[15]}}, dcd_imm } : //18_s
@@ -165,194 +167,8 @@ module mips_core(/*AUTOARG*/
              regsrc[2] ? $signed(dcd_offset) :
              regsrc[1] ? dcd_e_imm : //32_u
              regsrc[0] ? dcd_se_imm : rt_data;
-   end
-   //always @(*) begin
-   //     //ALU   
-   //     op1     = dcd_rs;
-   //     op2     = dcd_rt;
-   //     op_dst  = dcd_rd;
-   //     case(dcd_op)
-   //         `OP_OTHER0:
-   //             begin
-   //                 case(dcd_funct2)
-   //                     //`OP0_SYSCALL:
-   //                     //    begin
-   //                     //    end
-   //                     //`OP0_BREAK:
-   //                     //    begin
-   //                     //    end
-   //                     //`OP0_SLL:
-   //                     //    begin
-   //     		//	op2 = dcd_shamt;
-   //                     //    end
-   //                     //`OP0_SRL:
-   //                     //    begin 	
-   //     		//	op2 = dcd_shamt;
-   //                     //    end
-   //                     //`OP0_SRA:
-   //                     //    begin
-   //     		//	op1 = $signed(dcd_rs);
-   //     		//	op2 = dcd_shamt;
-   //                     //    end
-   //                     //`OP0_SLLV:
-   //                     //    begin
-   //                     //    end
-   //                     //`OP0_SRLV:
-   //                     //    begin
-   //                     //    end
-   //                     //`OP0_SRAV:
-   //                     //    begin
-   //                     //    end
-   //                     //`OP0_SLT:
-   //                     //    begin
-   //     		//	op1 = $signed(dcd_rs);
-   //     		//	op2 = $signed(dcd_rt);
-   //                     //    end
-   //                     //`OP0_MFHI:
-   //                     //    begin
-   //                     //    end
-   //                     //`OP0_MFLO:
-   //                     //    begin
-   //                     //    end
-   //                     //`OP0_MTLO:
-   //                     //    begin
-   //                     //    end
-   //                     //`OP0_MTHI:
-   //                     //    begin
-   //                     //    end
-   //                     //default:
-   //                     //    begin
-   //                     //    end
-   //                 endcase
-   //             end
-   //         `OP_ADDIU:
-   //             begin
-   //                 op2 = dcd_se_imm;
-   //             end
-   //         `OP_ADDI:
-   //             begin
-   //                 op2 = dcd_se_imm;
-   // 	        end
-   //         `OP_ANDI:
-   // 	        begin
-   //                 op2 = dcd_se_imm;
-   // 	        end
-   //         `OP_ORI:
-   //             begin
-   //                 op2 = dcd_se_imm;
-   //             end
-   //         `OP_XORI:
-   //             begin
-   //                 op2 = dcd_se_imm;
-   //             end
-   //         `OP_SLTI:
-   //             begin
-   //     	    op1 = $signed(dcd_rs);
-   //     	    op2 = dcd_se_imm;
-   //             end
-   //         `OP_SLTIU:
-   //             begin
-   //     	    op2 = dcd_se_imm;
-   //             end
-   //         //default:
-   //         //    begin
-   //         //    end
-   //     endcase
-   //end
 
-   //always @(posedge clk or negedge reset) begin
-   //      //Branch   
-   //     case(dcd_op)
-   //         //`OP_OTHER0:
-   //         //    begin
-   //         //        case(dcd_funct2)
-   //         //            `OP0_JR:
-   //         //                begin
-   //         //                end
-   //         //            `OP0_JALR:
-   //         //                begin
-   //         //                end
-   //         //        default:
-   //         //            begin
-   //         //            end
-   //         //        endcase
-   //         //    end
-   //         //`OP_OTHER1:
-   //         //    begin
-   //         //        case(dcd_rt)
-   //         //            `OP1_BLTZ:
-   //         //                begin
-   //         //                end
-   //         //            `OP1_BGEZ:
-   //         //                begin
-   //         //                end
-   //         //            `OP1_BLTZAL:
-   //         //                begin
-   //         //                end
-   //         //            `OP1_BGEZAL:
-   //         //                begin
-   //         //                end
-   //         //        default:
-   //         //            begin
-   //         //            end
-   //         //        endcase
-   //         //`OP_BEQ:
-   //         //    begin
-   //         //    end
-   //         //`OP_BNE:
-   //         //    begin
-   //         //    end
-   //         //`OP_BLEZ:
-   //         //    begin
-   //         //    end
-   //         //`OP_BGTZ:
-   //         //    begin
-   //         //    end
-   //         //`OP_J:
-   //         //    begin
-   //         //    end
-   //         //`OP_JAL:
-   //         //    begin
-   //         //    end
-   //         default:
-   //             begin
-   //             end
-   //     endcase
-   //end
-
-   //always @(posedge clk or negedge reset) begin
-   //      //Load/Store   
-   //     case(dcd_op)
-   //         `OP_LB:
-   //             begin
-   //             end
-   //         `OP_LH:
-   //             begin
-   //             end
-   //         `OP_LW:
-   //             begin
-   //             end
-   //         `OP_LBU:
-   //             begin
-   //             end
-   //         `OP_LHU:
-   //             begin
-   //             end
-   //         `OP_SB:
-   //             begin
-   //             end
-   //         `OP_SH:
-   //             begin
-   //             end
-   //         `OP_SW:
-   //             begin
-   //             end
-   //         default:
-   //             begin
-   //             end
-   //     endcase
-   //end
-
+   // Let Verilog-Mode pipe wires through for us.  This is another example
    // of Verilog-Mode's power -- undeclared nets get AUTOWIREd up when we
    // run 'make auto'.
    
@@ -386,39 +202,43 @@ module mips_core(/*AUTOARG*/
    // Don't forget to hookup the "halted" signal to trigger the register dump 
    regfile Regfile(
                     //Outputs
-                    .rs_data            (rs_data[31:0]),
-                    .rt_data            (rt_data[31:0]),
+                    .rs_data            (rs_data),
+                    .rt_data            (rt_data),
                     //Inputs
-                    .rs_num             (dcd_rs[4:0]),
-                    .rt_num             (dcd_rt[4:0]),
-                    .rd_num             (dcd_rd[4:0]),
-                    .rd_data            (rd_data[31:0]),
+                    .rs_num             (dcd_rs),
+                    .rt_num             (dcd_rt),
+                    .rd_num             (dcd_rd),
+                    .rd_data            (rd_data),
                     .rd_we              (ctrl_we),
                     .clk                (clk),
                     .rst_b              (rst_b),
                     .halted             (halted));
  
    // synthesis translate_off
-   initial begin
-     // Delete this block when you are ready to try for real
-     $display(""); 
-     $display(""); 
-     $display(""); 
-     $display(""); 
-     $display(">>>>> This works much better after you have hooked up the reg file. <<<<<");
-     $display(""); 
-     $display(""); 
-     $display(""); 
-     $display(""); 
-     $finish;
-   end
+   //initial begin
+   //  // Delete this block when you are ready to try for real
+   //  $display(""); 
+   //  $display(""); 
+   //  $display(""); 
+   //  $display(""); 
+   //  $display(">>>>> This works much better after you have hooked up the reg file. <<<<<");
+   //  $display(""); 
+   //  $display(""); 
+   //  $display(""); 
+   //  $display(""); 
+   //  $finish;
+   //end
    // synthesis translate_on
 
    // Execute
-   mips_ALU ALU(.alu__out(op_dst), 
-                .alu__op1(op1),
-                .alu__op2(op2),
+   mips_ALU ALU(.alu__out(rd_data), 
+                .alu__op1(rs_data),
+                .alu__op2(rt_data),
                 .alu__sel(alu__sel));
+   //mips_ALU ALU(.alu__out(op_dst), 
+   //             .alu__op1(op1),
+   //             .alu__op2(op2),
+   //             .alu__sel(alu__sel));
  
    // Miscellaneous stuff (Exceptions, syscalls, and halt)
    exception_unit EU(.exception_halt(exception_halt), .pc(pc), .rst_b(rst_b),
@@ -465,35 +285,58 @@ module mips_ALU(alu__out, alu__op1, alu__op2, alu__sel);
    output [31:0] alu__out;
    input [31:0]  alu__op1, alu__op2;
    input [3:0]   alu__sel;
-   //reg [31:0]    aluop;
+   //reg [31:0]    aluADD = alu__op1 + alu__op2; 
+   //reg [31:0]    aluSUB = alu__op1 - alu__op2; 
+   //logic [31:0]    aluSR = alu__op1>>alu__op2;
+   //logic [31:0]    aluSRA = alu__op1>>>alu__op2;
+   //logic [31:0]    aluSL = alu__op1<<alu__op2;
+   //logic [31:0]    aluAND = alu__op1 & alu__op2; 
+   //logic [31:0]    aluOR = alu__op1 | alu__op2;
+   //logic [31:0]    aluNOR =  ~(alu__op1 | alu__op2);
+   //logic [31:0]    aluXOR = alu__op1 ^ alu__op2;
+   //logic [31:0]    aluSLT = ((alu__op1 < alu__op2) ? 1 : 0);
+
+   //assign alu__out = alu__sel[0] ? aluADD:aluSUB;
+        //adder AdderUnit(alu__out, alu__op1, alu__op2, alu__sel[0]);
+        assign alu__out = alu__op1 + alu__op2;
    
-   always @(*) begin
-     case(alu__sel)
-         4'b0000: //ADD
-              //adder AdderUnit(alu__out, alu__op1, alu__op2, alu__sel[0]);
-              alu__out = alu__op1 + alu__op2;
-         4'b0001: //SUB
-              //adder1 AdderUnit(alu__out, alu__op1, alu__op2, alu__sel[0]);
-              alu__out = alu__op1 - alu__op2;
-         4'b0010: //SR
-              alu__out = alu__op1>>alu__op2;
-         4'b0010: //SRA
-              alu__out = alu__op1>>>alu__op2;
-         4'b0110: //SL
-              alu__out = alu__op1<<alu__op2;
-         4'b1000: //AND
-              alu__out = alu__op1 & alu__op2;
-         4'b1001: //OR
-              alu__out = alu__op1 | alu__op2;
-         4'b1010: //NOR
-              alu__out = ~(alu__op1 | alu__op2);
-         4'b1011: //XOR
-              alu__out = alu__op1 ^ alu__op2;
-         4'b1111: //SLT
-              alu__out = ((alu__op1 < alu__op2) ? 1 : 0); 
-     endcase
-     //alu__out = aluop;
-   end
+   //always @(*) begin
+   //  case(alu__sel)
+   //      4'b0000: //ADD
+   //           //adder AdderUnit(alu__out, alu__op1, alu__op2, alu__sel[0]);
+   //           assign alu__out = alu__op1 + alu__op2;
+   //           //assign alu__out = aluADD;
+   //      4'b0001: //SUB
+   //           //adder1 AdderUnit(alu__out, alu__op1, alu__op2, alu__sel[0]);
+   //           assign alu__out = alu__op1 - alu__op2;
+   //           //assign alu__out = aluSUB; 
+   //      4'b0010: //SR
+   //           assign alu__out = alu__op1>>alu__op2;
+   //           //assign alu__out = aluSR;
+   //      4'b0010: //SRA
+   //           //alu__out = alu__op1>>>alu__op2;
+   //           assign alu__out = aluSRA;
+   //      4'b0110: //SL
+   //           //alu__out = alu__op1<<alu__op2;
+   //           assign alu__out = aluSL;
+   //      4'b1000: //AND
+   //           //alu__out = alu__op1 & alu__op2;
+   //           assign alu__out = aluAND;
+   //      4'b1001: //OR
+   //           //alu__out = alu__op1 | alu__op2;
+   //           assign alu__out = aluOR;
+   //      4'b1010: //NOR
+   //           //alu__out = ~(alu__op1 | alu__op2);
+   //           assign alu__out = aluNOR;
+   //      4'b1011: //XOR
+   //           //alu__out = alu__op1 ^ alu__op2;
+   //           assign alu__out = aluXOR;
+   //      4'b1111: //SLT
+   //           //alu__out = ((alu__op1 < alu__op2) ? 1 : 0); 
+   //           assign alu__out = aluSLT;
+   //  endcase
+   //  //alu__out = aluop;
+   //end
 
 endmodule //mips_ALU
 
