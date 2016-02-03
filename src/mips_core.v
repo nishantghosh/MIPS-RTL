@@ -147,98 +147,101 @@ module mips_core(/*AUTOARG*/
 
 
    always @(*) begin
-        //ALU   
-        op1     = dcd_rs;
-        op2     = dcd_rt;
-        op_dst  = dcd_rd;
-        case(dcd_op)
-	    `OP_OTHER0:
-	        begin
-                    case(dcd_funct2)
-                        `OP0_SYSCALL:
-                            begin
-                            end
-                        `OP0_BREAK:
-                            begin
-                            end
-                        `OP0_SLL:
-                            begin
-				op2 = dcd_shamt;
-                            end
-                        `OP0_SRL:
-                            begin 	
-				op2 = dcd_shamt;
-                            end
-                        `OP0_SRA:
-                            begin
-				op1 = $signed(dcd_rs);
-				op2 = dcd_shamt;
-                            end
-                        //`OP0_SLLV:
-                         //   begin
-                         //   end
-                        //`OP0_SRLV:
-                         //   begin
-                         //   end
-                        //`OP0_SRAV:
-                         //   begin
-                          //  end
-                        //`OP0_SLT:
-                        //    begin
-			//	op1 = $signed(dcd_rs);
-			//	op2 = $signed(dcd_rt);
-                        //    end
-                        //`OP0_MFHI:
-                        //    begin
-                        //    end
-                        //`OP0_MFLO:
-                        //    begin
-                        //    end
-                        //`OP0_MTLO:
-                        //    begin
-                        //    end
-                        //`OP0_MTHI:
-                        //    begin
-                        //    end
-                        //default:
-                        //    begin
-                        //    end
-                    endcase
-	        end
-            `OP_ADDIU:
-                begin
-                    op2 = dcd_se_imm;
-                end
-            `OP_ADDI:
-                begin
-                    op2 = dcd_se_imm;
-    	        end
-            `OP_ANDI:
-    	        begin
-                    op2 = dcd_se_imm;
-    	        end
-	    `OP_ORI:
-	        begin
-                    op2 = dcd_se_imm;
-	        end
-	    `OP_XORI:
-	        begin
-                    op2 = dcd_se_imm;
-	        end
-	    `OP_SLTI:
-	        begin
-		    op1 = $signed(dcd_rs);
-		    op2 = dcd_se_imm;
-	        end
-	    `OP_SLTIU:
-	        begin
-		    op2 = dcd_se_imm;
-	        end
-	    //default:
-	    //    begin
-	    //    end
-        endcase
+       op1 = 
    end
+   //always @(*) begin
+   //     //ALU   
+   //     op1     = dcd_rs;
+   //     op2     = dcd_rt;
+   //     op_dst  = dcd_rd;
+   //     case(dcd_op)
+   //         `OP_OTHER0:
+   //             begin
+   //                 case(dcd_funct2)
+   //                     //`OP0_SYSCALL:
+   //                     //    begin
+   //                     //    end
+   //                     //`OP0_BREAK:
+   //                     //    begin
+   //                     //    end
+   //                     //`OP0_SLL:
+   //                     //    begin
+   //     		//	op2 = dcd_shamt;
+   //                     //    end
+   //                     //`OP0_SRL:
+   //                     //    begin 	
+   //     		//	op2 = dcd_shamt;
+   //                     //    end
+   //                     //`OP0_SRA:
+   //                     //    begin
+   //     		//	op1 = $signed(dcd_rs);
+   //     		//	op2 = dcd_shamt;
+   //                     //    end
+   //                     //`OP0_SLLV:
+   //                     //    begin
+   //                     //    end
+   //                     //`OP0_SRLV:
+   //                     //    begin
+   //                     //    end
+   //                     //`OP0_SRAV:
+   //                     //    begin
+   //                     //    end
+   //                     //`OP0_SLT:
+   //                     //    begin
+   //     		//	op1 = $signed(dcd_rs);
+   //     		//	op2 = $signed(dcd_rt);
+   //                     //    end
+   //                     //`OP0_MFHI:
+   //                     //    begin
+   //                     //    end
+   //                     //`OP0_MFLO:
+   //                     //    begin
+   //                     //    end
+   //                     //`OP0_MTLO:
+   //                     //    begin
+   //                     //    end
+   //                     //`OP0_MTHI:
+   //                     //    begin
+   //                     //    end
+   //                     //default:
+   //                     //    begin
+   //                     //    end
+   //                 endcase
+   //             end
+   //         `OP_ADDIU:
+   //             begin
+   //                 op2 = dcd_se_imm;
+   //             end
+   //         `OP_ADDI:
+   //             begin
+   //                 op2 = dcd_se_imm;
+   // 	        end
+   //         `OP_ANDI:
+   // 	        begin
+   //                 op2 = dcd_se_imm;
+   // 	        end
+   //         `OP_ORI:
+   //             begin
+   //                 op2 = dcd_se_imm;
+   //             end
+   //         `OP_XORI:
+   //             begin
+   //                 op2 = dcd_se_imm;
+   //             end
+   //         `OP_SLTI:
+   //             begin
+   //     	    op1 = $signed(dcd_rs);
+   //     	    op2 = dcd_se_imm;
+   //             end
+   //         `OP_SLTIU:
+   //             begin
+   //     	    op2 = dcd_se_imm;
+   //             end
+   //         //default:
+   //         //    begin
+   //         //    end
+   //     endcase
+   //end
 
    //always @(posedge clk or negedge reset) begin
    //      //Branch   
