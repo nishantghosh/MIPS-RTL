@@ -67,6 +67,9 @@ module mips_decode(/*AUTOARG*/
    output reg        sign_ext;
    output reg        shamt;
    output reg        op_sel;
+   output reg        op_branch;
+   output reg        branch;
+   output reg  [2:0] branch_mux_sel;
     
 
    always @(*) begin
@@ -81,6 +84,9 @@ module mips_decode(/*AUTOARG*/
         shamt = 1'b0;
         regdst = 1'b0;
         op_sel = 1'b1;
+        op_banch = 1'b1;
+        branch = 1'b0;
+        branch_mux_sel = 3'b000;
 
         case(dcd_op)
 	    `OP_OTHER0:
@@ -202,25 +208,52 @@ module mips_decode(/*AUTOARG*/
                         ctrl_RI = 1'b1;
                     endcase
 	        end
-	    //`OP_OTHER1:
-	    //    begin
-            //        case(dcd_rt)
-            //            `OP0_BLTZ:
-            //                begin
-            //                end
-            //            `OP0_BGEZ:
-            //                begin
-            //                end
-            //            `OP0_BLTZAL:
-            //                begin
-            //                end
-            //            `OP0_BGEZAL:
-            //                begin
-            //                end
-            //        default:
-            //            begin
-            //            end
-            //        endcase
+	    `OP_OTHER1:
+	        begin
+                    case(dcd_rt)
+                        `OP0_BLTZ:
+                            begin
+                                branch = 1'b1;
+                                branch_mux_sel = 3'b100;
+                            end
+                        `OP0_BGEZ:
+                            begin
+                                 branch = 1'b1;
+                                 branch_mux_sel = 3'b101;
+                            end
+                        `OP0_BLTZAL:
+                            begin
+                                 branch = 1'b1;
+                                 branch_mux_sel = 3'b110;
+                            end
+                        `OP0_BGEZAL:
+                            begin
+                                 branch = 1'b1;
+                                 branch_mux_sel = 3'b111;
+                            end
+                    endcase
+            `OP_BEQ:
+                begin
+                   branch_mux_sel = 3'b000; 
+                   branch = 1'b1;
+                   op_branch = 1'b0; 
+                end
+            `OP_BNE:
+                begin
+                   branch_mux_sel = 3'b001;
+                   branch = 1'b1;
+                   op_branch = 1'b0;
+                end
+            `OP_BLEZ:
+                begin
+                   branch_mux_sel = 3'b010;
+                   branch = 1'b1;
+                end
+            `OP_BGTZ:
+                begin
+                   branch_mux_sel = 3'b011;
+                   branch = 1'b1;
+                end
             `OP_ADDIU:
                 begin
                     alu__sel = `ALU_ADD;

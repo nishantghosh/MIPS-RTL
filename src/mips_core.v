@@ -346,10 +346,57 @@ module mips_ALU(alu__out, alu__op1, alu__op2, alu__sel);
 
 endmodule //mips_ALU
 
-//module Branch(pc_out, pc_in, rd_data, rt_data, rs_data, dcd_se_offset);
-// 
-//   output reg [31:0] pc_out;
-//   input reg [31:0] pc_in
+module Branch(pc_out, pc_in, rd_data, rt_data, rs_data, dcd_se_offset, br_mux_sel);
+
+    output reg [31:0] pc_out;
+    input      [31:0] pc_in,rs_data,rt_data,dcd_se_offset;
+    input      [2:0]  br_mux_sel;
+    output reg [31:0] link; 
+    always @(*)
+     link = 31'b0;
+      begin 
+        case(br_mux_sel)
+           3'b000://BEQ
+           begin
+             if(rs_data == rt_data)
+                pc_out = pc_in + dcd_se_offset;
+           end
+           3'b000://BNE
+           begin
+             if(rs_data != rt_data)
+                pc_out = pc_in + dcd_se_offset;
+           end
+           3'b000://BLEZ
+           begin
+             if(rs_data == rt_data)
+                pc_out = pc_in + dcd_se_offset;
+           end
+           3'b000://BEQ
+           begin
+             if(rs_data == rt_data)
+                pc_out = pc_in + dcd_se_offset;
+           end
+           3'b000://BEQ
+           begin
+             if(rs_data == rt_data)
+                pc_out = pc_in + dcd_se_offset;
+           end
+           3'b000://BEQ
+           begin
+             if(rs_data == rt_data)
+                pc_out = pc_in + dcd_se_offset;
+           end
+           3'b000://BEQ
+           begin
+             if(rs_data == rt_data)
+                pc_out = pc_in + dcd_se_offset;
+           end
+           3'b000://BEQ
+           begin
+             if(rs_data == rt_data)
+                pc_out = pc_in + dcd_se_offset;
+           end
+         
 
 //// register: A register which may be reset to an arbirary value
 ////
