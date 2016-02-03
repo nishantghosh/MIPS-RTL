@@ -161,47 +161,34 @@ module mips_core(/*AUTOARG*/
                         `OP0_BREAK:
                             begin
                             end
-                        //`OP0_ADD:
-                        //    begin
-                        //    end
                         `OP0_SLL:
                             begin
+				op2 = dcd_shamt;
                             end
                         `OP0_SRL:
-                            begin
+                            begin 	
+				op2 = dcd_shamt;
+                            end
                             end
                         `OP0_SRA:
                             begin
+				op1 = $signed(dcd_rs);
+				op2 = dcd_shamt;
                             end
-                        `OP0_SLLV:
-                            begin
                             end
-                        `OP0_SRLV:
-                            begin
-                            end
-                        `OP0_SRAV:
-                            begin
-                            end
-                       // `OP0_ADDU:
-                       //   begin
-                       //   end
-                       // `OP0_SUB:
-                       //     begin
-                       //     end
-                        //`OP0_SUBU:
-                        //    begin
-                        //    end
-                        //`OP0_AND:
-                        //    begin
-                        //    end
-                        //`OP0_OR:
-                        //    begin
-                        //    end
-                        //`OP0_NOR:
-                        //    begin
-                        //    end
+                        //`OP0_SLLV:
+                         //   begin
+                         //   end
+                        //`OP0_SRLV:
+                         //   begin
+                         //   end
+                        //`OP0_SRAV:
+                         //   begin
+                          //  end
                         `OP0_SLT:
                             begin
+				op1 = $signed(dcd_rs);
+				op2 = $signed(dcd_rt);
                             end
                         `OP0_MFHI:
                             begin
@@ -215,13 +202,7 @@ module mips_core(/*AUTOARG*/
                         `OP0_MTHI:
                             begin
                             end
-                        //`OP0_SLTU:
-                        //    begin
-                        //    end
-                        //`OP0_XOR:
-                        //    begin
-                        //    end
-                    default:
+                       default:
                         begin
                         end
                     endcase
@@ -248,9 +229,12 @@ module mips_core(/*AUTOARG*/
 	        end
 	    `OP_SLTI:
 	        begin
+		    op1 = $signed(dcd_rs);
+		    op2 = dcd_se_imm;
 	        end
 	    `OP_SLTIU:
 	        begin
+		    op2 = dcd_se_imm;
 	        end
 	    default:
 	        begin
@@ -351,14 +335,6 @@ module mips_core(/*AUTOARG*/
         endcase
    end
 
-
-
-
-
-
-
-
-   // Let Verilog-Mode pipe wires through for us.  This is another example
    // of Verilog-Mode's power -- undeclared nets get AUTOWIREd up when we
    // run 'make auto'.
    
@@ -466,33 +442,37 @@ module mips_ALU(alu__out, alu__op1, alu__op2, alu__sel);
    input [31:0]  alu__op1, alu__op2;
    input [3:0]   alu__sel;
    
-   always @ (*)
+   always @(*)
      case(alu__sel)
-         4'b0000:
+         4'b0000: //ADD
               adder AdderUnit(alu__out, alu__op1, alu__op2, alu__sel[0]);
-         4'b0001:
+         4'b0001: //SUB
               adder AdderUnit(alu__out, alu__op1, alu__op2, alu__sel[0]);
-         4'b0010:
-              alu__out = alu__op1>>alu__op2;
-         4'b0010:
+         4'b0010: //SR
+             assign alu__out = alu__op1>>alu__op2;
+         4'b0010: //SRA
               alu__out = alu__op1>>>alu__op2;
-         4'b0110:
+         4'b0110: //SL
               alu__out = alu__op1<<alu__op2;
-         4'b1000:
+         4'b1000: //AND
               alu__out = alu__op1 & alu__op2;
-         4'b1001:
+         4'b1001: //OR
               alu__out = alu__op1 | alu__op2;
-         4'b1010:
+         4'b1010: //NOR
               alu__out = ~(alu__op1 | alu__op2);
-         4'b1011:
+         4'b1011: //XOR
               alu__out = alu__op1 ^ alu__op2;
-         4'b1111:
+         4'b1111: //SLT
               alu__out = ((alu__op1 < alu__op2) ? 1 : 0); 
      endcase
    end
 
 endmodule
 
+module Branch(pc_out, pc_in, rd_data, rt_data, rs_data, dcd_se_offset);
+ 
+   output reg [31:0] pc_out;
+   input reg [31:0] pc_in
 
 //// register: A register which may be reset to an arbirary value
 ////
