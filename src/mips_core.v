@@ -146,7 +146,7 @@ module mips_core(/*AUTOARG*/
 
 
 
-   always @(posedge clk or negedge reset) begin
+   always @(*) begin
         //ALU   
         op1     = dcd_rs;
         op2     = dcd_rt;
@@ -183,26 +183,26 @@ module mips_core(/*AUTOARG*/
                         //`OP0_SRAV:
                          //   begin
                           //  end
-                        `OP0_SLT:
-                            begin
-				op1 = $signed(dcd_rs);
-				op2 = $signed(dcd_rt);
-                            end
-                        `OP0_MFHI:
-                            begin
-                            end
-                        `OP0_MFLO:
-                            begin
-                            end
-                        `OP0_MTLO:
-                            begin
-                            end
-                        `OP0_MTHI:
-                            begin
-                            end
-                       default:
-                        begin
-                        end
+                        //`OP0_SLT:
+                        //    begin
+			//	op1 = $signed(dcd_rs);
+			//	op2 = $signed(dcd_rt);
+                        //    end
+                        //`OP0_MFHI:
+                        //    begin
+                        //    end
+                        //`OP0_MFLO:
+                        //    begin
+                        //    end
+                        //`OP0_MTLO:
+                        //    begin
+                        //    end
+                        //`OP0_MTHI:
+                        //    begin
+                        //    end
+                        //default:
+                        //    begin
+                        //    end
                     endcase
 	        end
             `OP_ADDIU:
@@ -234,104 +234,104 @@ module mips_core(/*AUTOARG*/
 	        begin
 		    op2 = dcd_se_imm;
 	        end
-	    default:
-	        begin
-	        end
+	    //default:
+	    //    begin
+	    //    end
         endcase
    end
 
-   always @(posedge clk or negedge reset) begin
-         //Branch   
-        case(dcd_op)
-	    `OP_OTHER0:
-	        begin
-                    case(dcd_funct2)
-                        `OP0_JR:
-                            begin
-                            end
-                        `OP0_JALR:
-                            begin
-                            end
-                    default:
-                        begin
-                        end
-                    endcase
-	        end
-	    `OP_OTHER1:
-	        begin
-                    case(dcd_rt)
-                        `OP1_BLTZ:
-                            begin
-                            end
-                        `OP1_BGEZ:
-                            begin
-                            end
-                        `OP1_BLTZAL:
-                            begin
-                            end
-                        `OP1_BGEZAL:
-                            begin
-                            end
-                    default:
-                        begin
-                        end
-                    endcase
-	    //`OP_BEQ:
-	    //    begin
-	    //    end
-	    //`OP_BNE:
-	    //    begin
-	    //    end
-	    //`OP_BLEZ:
-	    //    begin
-	    //    end
-	    //`OP_BGTZ:
-	    //    begin
-	    //    end
-	    //`OP_J:
-	    //    begin
-	    //    end
-	    //`OP_JAL:
-	    //    begin
-	    //    end
-	    default:
-	        begin
-	        end
-        endcase
-   end
+   //always @(posedge clk or negedge reset) begin
+   //      //Branch   
+   //     case(dcd_op)
+   //         //`OP_OTHER0:
+   //         //    begin
+   //         //        case(dcd_funct2)
+   //         //            `OP0_JR:
+   //         //                begin
+   //         //                end
+   //         //            `OP0_JALR:
+   //         //                begin
+   //         //                end
+   //         //        default:
+   //         //            begin
+   //         //            end
+   //         //        endcase
+   //         //    end
+   //         //`OP_OTHER1:
+   //         //    begin
+   //         //        case(dcd_rt)
+   //         //            `OP1_BLTZ:
+   //         //                begin
+   //         //                end
+   //         //            `OP1_BGEZ:
+   //         //                begin
+   //         //                end
+   //         //            `OP1_BLTZAL:
+   //         //                begin
+   //         //                end
+   //         //            `OP1_BGEZAL:
+   //         //                begin
+   //         //                end
+   //         //        default:
+   //         //            begin
+   //         //            end
+   //         //        endcase
+   //         //`OP_BEQ:
+   //         //    begin
+   //         //    end
+   //         //`OP_BNE:
+   //         //    begin
+   //         //    end
+   //         //`OP_BLEZ:
+   //         //    begin
+   //         //    end
+   //         //`OP_BGTZ:
+   //         //    begin
+   //         //    end
+   //         //`OP_J:
+   //         //    begin
+   //         //    end
+   //         //`OP_JAL:
+   //         //    begin
+   //         //    end
+   //         default:
+   //             begin
+   //             end
+   //     endcase
+   //end
 
-   always @(posedge clk or negedge reset) begin
-         //Load/Store   
-        case(dcd_op)
-	    `OP_LB:
-	        begin
-	        end
-	    `OP_LH:
-	        begin
-	        end
-	    `OP_LW:
-	        begin
-	        end
-	    `OP_LBU:
-	        begin
-	        end
-	    `OP_LHU:
-	        begin
-	        end
-	    `OP_SB:
-	        begin
-	        end
-	    `OP_SH:
-	        begin
-	        end
-	    `OP_SW:
-	        begin
-	        end
-	    default:
-	        begin
-	        end
-        endcase
-   end
+   //always @(posedge clk or negedge reset) begin
+   //      //Load/Store   
+   //     case(dcd_op)
+   //         `OP_LB:
+   //             begin
+   //             end
+   //         `OP_LH:
+   //             begin
+   //             end
+   //         `OP_LW:
+   //             begin
+   //             end
+   //         `OP_LBU:
+   //             begin
+   //             end
+   //         `OP_LHU:
+   //             begin
+   //             end
+   //         `OP_SB:
+   //             begin
+   //             end
+   //         `OP_SH:
+   //             begin
+   //             end
+   //         `OP_SW:
+   //             begin
+   //             end
+   //         default:
+   //             begin
+   //             end
+   //     endcase
+   //end
 
    // of Verilog-Mode's power -- undeclared nets get AUTOWIREd up when we
    // run 'make auto'.
