@@ -90,6 +90,8 @@ module mips_core(/*AUTOARG*/
    wire          exception_halt, syscall_halt, internal_halt;
    wire          load_epc, load_bva, load_bva_sel;
    wire [31:0]   rt_data, rs_data, rd_data, alu__out, r_v0;
+   //wire [31:0]   rt_data, rs_data, rd_data, r_v0;
+   //reg  [31:0]   alu__out;
    wire [31:0]   epc, cause, bad_v_addr;
    wire [4:0]    cause_code;
 
@@ -101,9 +103,15 @@ module mips_core(/*AUTOARG*/
    wire [25:0]   dcd_target;
    wire [19:0]   dcd_code;
    wire          dcd_bczft;
-   reg           op1[31:0];
-   reg           op2[31:0]; 
-   reg           op_dst[31:0];
+   reg           op_sel;
+   reg [31:0]    op1;
+   reg [31:0]    op2; 
+   reg [31:0]    op_dst;
+   reg 	         alu_mux_sel;
+   reg [7:0]     regsrc;
+   reg           regdst;
+   reg           sign_ext;
+   reg           shamt;
    
    // PC Management
    register #(32, text_start) PCReg(pc, nextpc, clk, ~internal_halt, rst_b);
@@ -147,7 +155,16 @@ module mips_core(/*AUTOARG*/
 
 
    always @(*) begin
-       op1 = 
+       op1 = op_sel ? rs_data : rt_data; //TODO - reg[dcd_rs]
+       op_dst = regdst ? rt_data : rs_data;
+       op2 = regsrc[7] ? dcd_rs :
+             regsrc[6] ? {2'h0, dcd_imm} : //18_u
+             regsrc[5] ? dcd_shamt : //SLL
+             regsrc[4] ? { {2{dcd_imm[15]}}, dcd_imm } : //18_s
+             regsrc[3] ? dcd_imm : //16_u
+             regsrc[2] ? $signed(dcd_offset) :
+             regsrc[1] ? dcd_e_imm : //32_u
+             regsrc[0] ? dcd_se_imm : rt_data;
    end
    //always @(*) begin
    //     //ALU   
@@ -356,12 +373,18 @@ module mips_core(/*AUTOARG*/
 		       .alu__sel	(alu__sel[3:0]),
 		       // Inputs
 		       .dcd_op		(dcd_op[5:0]),
+                       .alu_mux_sel     (alu_mux_sel),
+                       .regsrc          (regsrc),
+                       .regdst          (regdst),
+                       .op_sel          (op_sel),
+                       .sign_ext        (sign_ext),
+                       .shamt           (shamt),
 		       .dcd_funct2	(dcd_funct2[5:0]));
  
    // Register File
    // Instantiate the register file from regfile.v here.
    // Don't forget to hookup the "halted" signal to trigger the register dump 
-   refile Regfile(
+   regfile Regfile(
                     //Outputs
                     .rs_data            (rs_data[31:0]),
                     .rt_data            (rt_data[31:0]),
@@ -442,15 +465,18 @@ module mips_ALU(alu__out, alu__op1, alu__op2, alu__sel);
    output [31:0] alu__out;
    input [31:0]  alu__op1, alu__op2;
    input [3:0]   alu__sel;
+   //reg [31:0]    aluop;
    
-   always @(*)
+   always @(*) begin
      case(alu__sel)
          4'b0000: //ADD
-              adder AdderUnit(alu__out, alu__op1, alu__op2, alu__sel[0]);
+              //adder AdderUnit(alu__out, alu__op1, alu__op2, alu__sel[0]);
+              alu__out = alu__op1 + alu__op2;
          4'b0001: //SUB
-              adder AdderUnit(alu__out, alu__op1, alu__op2, alu__sel[0]);
+              //adder1 AdderUnit(alu__out, alu__op1, alu__op2, alu__sel[0]);
+              alu__out = alu__op1 - alu__op2;
          4'b0010: //SR
-             assign alu__out = alu__op1>>alu__op2;
+              alu__out = alu__op1>>alu__op2;
          4'b0010: //SRA
               alu__out = alu__op1>>>alu__op2;
          4'b0110: //SL
@@ -466,14 +492,15 @@ module mips_ALU(alu__out, alu__op1, alu__op2, alu__sel);
          4'b1111: //SLT
               alu__out = ((alu__op1 < alu__op2) ? 1 : 0); 
      endcase
+     //alu__out = aluop;
    end
 
-endmodule
+endmodule //mips_ALU
 
-module Branch(pc_out, pc_in, rd_data, rt_data, rs_data, dcd_se_offset);
- 
-   output reg [31:0] pc_out;
-   input reg [31:0] pc_in
+//module Branch(pc_out, pc_in, rd_data, rt_data, rs_data, dcd_se_offset);
+// 
+//   output reg [31:0] pc_out;
+//   input reg [31:0] pc_in
 
 //// register: A register which may be reset to an arbirary value
 ////

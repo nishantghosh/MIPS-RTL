@@ -53,7 +53,7 @@
 ////
 module mips_decode(/*AUTOARG*/
    // Outputs
-   ctrl_we, ctrl_Sys, ctrl_RI, alu__sel, 
+   ctrl_we, ctrl_Sys, ctrl_RI, alu__sel, alu_mux_sel, regsrc, regdst, sign_ext, shamt, op_sel,
    // Inputs
    dcd_op, dcd_funct2
    );
@@ -66,6 +66,7 @@ module mips_decode(/*AUTOARG*/
    output reg        regdst;
    output reg        sign_ext;
    output reg        shamt;
+   output reg        op_sel;
     
 
    always @(*) begin
@@ -125,7 +126,7 @@ module mips_decode(/*AUTOARG*/
                             end
                         `OP0_SRLV:
                             begin
-                                alu__sel = `ALU_SR
+                                alu__sel = `ALU_SR;
                                 ctrl_we = 1'b1;
                                 op_sel = 1'b0;
                             end
