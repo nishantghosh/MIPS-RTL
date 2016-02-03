@@ -148,12 +148,9 @@ module mips_core(/*AUTOARG*/
 
    always @(posedge clk or negedge reset) begin
         //ALU   
-        op1 = rs;
-        op2 = rt;
-        op_dst = rd;
-        op_OR = op1|op2;
-        op_AND = op1 . op2;
-        op_
+        op1     = dcd_rs;
+        op2     = dcd_rt;
+        op_dst  = dcd_rd;
         case(dcd_op)
 	    `OP_OTHER0:
 	        begin
@@ -164,9 +161,9 @@ module mips_core(/*AUTOARG*/
                         `OP0_BREAK:
                             begin
                             end
-                        `OP0_ADD:
-                            begin
-                            end
+                        //`OP0_ADD:
+                        //    begin
+                        //    end
                         `OP0_SLL:
                             begin
                             end
@@ -185,24 +182,24 @@ module mips_core(/*AUTOARG*/
                         `OP0_SRAV:
                             begin
                             end
-                        `OP0_ADDU:
-                            begin
-                            end
-                        `OP0_SUB:
-                            begin
-                            end
-                        `OP0_SUBU:
-                            begin
-                            end
-                        `OP0_AND:
-                            begin
-                            end
-                        `OP0_OR:
-                            begin
-                            end
-                        `OP0_NOR:
-                            begin
-                            end
+                       // `OP0_ADDU:
+                       //   begin
+                       //   end
+                       // `OP0_SUB:
+                       //     begin
+                       //     end
+                        //`OP0_SUBU:
+                        //    begin
+                        //    end
+                        //`OP0_AND:
+                        //    begin
+                        //    end
+                        //`OP0_OR:
+                        //    begin
+                        //    end
+                        //`OP0_NOR:
+                        //    begin
+                        //    end
                         `OP0_SLT:
                             begin
                             end
@@ -218,12 +215,12 @@ module mips_core(/*AUTOARG*/
                         `OP0_MTHI:
                             begin
                             end
-                        `OP0_SLTU:
-                            begin
-                            end
-                        `OP0_XOR:
-                            begin
-                            end
+                        //`OP0_SLTU:
+                        //    begin
+                        //    end
+                        //`OP0_XOR:
+                        //    begin
+                        //    end
                     default:
                         begin
                         end
@@ -231,18 +228,23 @@ module mips_core(/*AUTOARG*/
 	        end
             `OP_ADDIU:
                 begin
+                    op2 = dcd_se_imm;
                 end
             `OP_ADDI:
                 begin
+                    op2 = dcd_se_imm;
     	        end
             `OP_ANDI:
     	        begin
+                    op2 = dcd_se_imm;
     	        end
 	    `OP_ORI:
 	        begin
+                    op2 = dcd_se_imm;
 	        end
 	    `OP_XORI:
 	        begin
+                    op2 = dcd_se_imm;
 	        end
 	    `OP_SLTI:
 	        begin
@@ -463,8 +465,31 @@ module mips_ALU(alu__out, alu__op1, alu__op2, alu__sel);
    output [31:0] alu__out;
    input [31:0]  alu__op1, alu__op2;
    input [3:0]   alu__sel;
-
-   adder AdderUnit(alu__out, alu__op1, alu__op2, alu__sel[0]);
+   
+   always @ (*)
+     case(alu__sel)
+         4'b0000:
+              adder AdderUnit(alu__out, alu__op1, alu__op2, alu__sel[0]);
+         4'b0001:
+              adder AdderUnit(alu__out, alu__op1, alu__op2, alu__sel[0]);
+         4'b0010:
+              alu__out = alu__op1>>alu__op2;
+         4'b0010:
+              alu__out = alu__op1>>>alu__op2;
+         4'b0110:
+              alu__out = alu__op1<<alu__op2;
+         4'b1000:
+              alu__out = alu__op1 & alu__op2;
+         4'b1001:
+              alu__out = alu__op1 | alu__op2;
+         4'b1010:
+              alu__out = ~(alu__op1 | alu__op2);
+         4'b1011:
+              alu__out = alu__op1 ^ alu__op2;
+         4'b1111:
+              alu__out = ((alu__op1 < alu__op2) ? 1 : 0); 
+     endcase
+   end
 
 endmodule
 

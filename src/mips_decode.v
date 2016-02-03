@@ -97,7 +97,7 @@ module mips_decode(/*AUTOARG*/
                             end
                         `OP0_SRA:
                             begin
-		                alu__sel = `ALU_SR;
+		                alu__sel = `ALU_SRA;
 		                ctrl_we = 1'b1;
                             end
                         `OP0_SLLV:
@@ -110,7 +110,7 @@ module mips_decode(/*AUTOARG*/
                             end
                         `OP0_SRAV:
                             begin
-		                alu__sel = `ALU_SR;
+		                alu__sel = `ALU_SRA;
 		                ctrl_we = 1'b1;
                             end
                         `OP0_ADDU:
