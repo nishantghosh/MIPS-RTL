@@ -62,7 +62,7 @@ module mips_decode(/*AUTOARG*/
    output reg        ctrl_we, ctrl_Sys, ctrl_RI;
    output reg  [3:0] alu__sel;
    output reg 	     alu_mux_sel;
-   output reg  [6:0] regsrc;
+   output reg  [7:0] regsrc;
    output reg        regdst;
    output reg        sign_ext;
    output reg        shamt;
