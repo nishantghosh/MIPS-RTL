@@ -61,11 +61,11 @@ module mips_decode(/*AUTOARG*/
    input       [5:0] dcd_op, dcd_funct2;
    output reg        ctrl_we, ctrl_Sys, ctrl_RI;
    output reg  [3:0] alu__sel;
+   
 
 
 
-
-   always @(posedge clk or negedge reset) begin
+   always @(*) begin
         //ALU   
         alu__sel = 4'hx;
         ctrl_we = 1'b0;
@@ -77,9 +77,9 @@ module mips_decode(/*AUTOARG*/
                     case(dcd_funct2)
                         `OP0_SYSCALL:
                             ctrl_Sys = 1'b1;
-                        `OP0_BREAK:
-                            begin
-                            end
+                        //`OP0_BREAK:
+                        //    begin
+                        //    end
                         `OP0_ADD:
                             begin
                                 alu__sel = `ALU_ADD;
@@ -105,9 +105,9 @@ module mips_decode(/*AUTOARG*/
 		                alu__sel = `ALU_SL;
 		                ctrl_we = 1'b1;
                             end
-                        `OP0_SRLV:
-                            begin
-                            end
+                        //`OP0_SRLV:
+                        //    begin
+                        //    end
                         `OP0_SRAV:
                             begin
 		                alu__sel = `ALU_SRA;
@@ -149,16 +149,16 @@ module mips_decode(/*AUTOARG*/
 		                ctrl_we = 1'b1;
                             end
                         `OP0_MFHI:
-		            ctrl_we = 1'b1
-                        `OP0_MFLO:
-                            begin
-                            end
-                        `OP0_MTLO:
-                            begin
-                            end
-                        `OP0_MTHI:
-                            begin
-                            end
+		            ctrl_we = 1'b1;
+                        //`OP0_MFLO:
+                        //    begin
+                        //    end
+                        //`OP0_MTLO:
+                        //    begin
+                        //    end
+                        //`OP0_MTHI:
+                        //    begin
+                        //    end
                         `OP0_SLTU:
                             begin
 		                alu__sel = `ALU_SL;
@@ -177,25 +177,25 @@ module mips_decode(/*AUTOARG*/
                         ctrl_RI = 1'b1;
                     endcase
 	        end
-	    `OP_OTHER1:
-	        begin
-                    case(dcd_rt)
-                        `OP0_BLTZ:
-                            begin
-                            end
-                        `OP0_BGEZ:
-                            begin
-                            end
-                        `OP0_BLTZAL:
-                            begin
-                            end
-                        `OP0_BGEZAL:
-                            begin
-                            end
-                    default:
-                        begin
-                        end
-                    endcase
+	    //`OP_OTHER1:
+	    //    begin
+            //        case(dcd_rt)
+            //            `OP0_BLTZ:
+            //                begin
+            //                end
+            //            `OP0_BGEZ:
+            //                begin
+            //                end
+            //            `OP0_BLTZAL:
+            //                begin
+            //                end
+            //            `OP0_BGEZAL:
+            //                begin
+            //                end
+            //        default:
+            //            begin
+            //            end
+            //        endcase
             `OP_ADDIU:
                 begin
                     alu__sel = `ALU_ADD;
@@ -231,31 +231,31 @@ module mips_decode(/*AUTOARG*/
 	            alu__sel = `ALU_SL;
 	            ctrl_we = 1'b1;
 	        end
-	    `OP_LB:
-	        begin
-	        end
-	    `OP_LH:
-	        begin
-	        end
-	    `OP_LW:
-	        begin
-	        end
-	    `OP_LBU:
-	        begin
-	        end
-	    `OP_LHU:
-	        begin
-	        end
-	    `OP_SB:
-	        begin
-	        end
-	    `OP_SH:
-	        begin
-	        end
-	    `OP_SW:
-	        begin
-	        end
-	    default:
+	    //`OP_LB:
+	    //    begin
+	    //    end
+	    //`OP_LH:
+	    //    begin
+	    //    end
+	    //`OP_LW:
+	    //    begin
+	    //    end
+	    //`OP_LBU:
+	    //    begin
+	    //    end
+	    //`OP_LHU:
+	    //    begin
+	    //    end
+	    //`OP_SB:
+	    //    begin
+	    //    end
+	    //`OP_SH:
+	    //    begin
+	    //    end
+	    //`OP_SW:
+	    //    begin
+	    //    end
+	    //default:
 	    default:
 	        begin
                     ctrl_RI = 1'b1;

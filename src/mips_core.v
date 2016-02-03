@@ -169,12 +169,10 @@ module mips_core(/*AUTOARG*/
                             begin 	
 				op2 = dcd_shamt;
                             end
-                            end
                         `OP0_SRA:
                             begin
 				op1 = $signed(dcd_rs);
 				op2 = dcd_shamt;
-                            end
                             end
                         //`OP0_SLLV:
                          //   begin
@@ -262,40 +260,40 @@ module mips_core(/*AUTOARG*/
 	    `OP_OTHER1:
 	        begin
                     case(dcd_rt)
-                        `OP0_BLTZ:
+                        `OP1_BLTZ:
                             begin
                             end
-                        `OP0_BGEZ:
+                        `OP1_BGEZ:
                             begin
                             end
-                        `OP0_BLTZAL:
+                        `OP1_BLTZAL:
                             begin
                             end
-                        `OP0_BGEZAL:
+                        `OP1_BGEZAL:
                             begin
                             end
                     default:
                         begin
                         end
                     endcase
-	    `OP_BEQ:
-	        begin
-	        end
-	    `OP_BNE:
-	        begin
-	        end
-	    `OP_BLEZ:
-	        begin
-	        end
-	    `OP_BGTZ:
-	        begin
-	        end
-	    `OP_J:
-	        begin
-	        end
-	    `OP_JAL:
-	        begin
-	        end
+	    //`OP_BEQ:
+	    //    begin
+	    //    end
+	    //`OP_BNE:
+	    //    begin
+	    //    end
+	    //`OP_BLEZ:
+	    //    begin
+	    //    end
+	    //`OP_BGTZ:
+	    //    begin
+	    //    end
+	    //`OP_J:
+	    //    begin
+	    //    end
+	    //`OP_JAL:
+	    //    begin
+	    //    end
 	    default:
 	        begin
 	        end
